@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="ru" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Премиум Табак Москва — Онлайн-витрина ассортимента</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            900: '#0a0a0c',
+                            800: '#121216',
+                            700: '#1a1a22',
+                            600: '#272733',
+                            500: '#3f3f52',
+                        },
+                        amber: {
+                            500: '#f59e0b',
+                            600: '#d97706',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #121216; }
+        ::-webkit-scrollbar-thumb { background: #272733; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #3f3f52; }
+    </style>
+</head>
+<body class="bg-dark-900 text-gray-100 min-h-screen flex flex-col antialiased selection:bg-amber-500 selection:text-black">
+
+    <!-- Header -->
+    <header class="sticky top-0 z-50 backdrop-blur-md bg-dark-800/90 border-b border-dark-600">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-600 to-amber-400 flex items-center justify-center text-dark-900 font-bold text-xl shadow-lg shadow-amber-500/20">
+                    <i class="fa-solid fa-fire-flame-curved"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold tracking-tight text-white">SMOKE MOSCOW</h1>
+                    <p class="text-xs text-gray-400">Оптовая онлайн-витрина табака</p>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <button onclick="toggleDeliveryModal()" class="hidden md:flex items-center space-x-2 text-xs font-medium px-3 py-2 rounded-lg bg-dark-700 hover:bg-dark-600 border border-dark-500/30 transition">
+                    <i class="fa-solid fa-truck-fast text-amber-500"></i>
+                    <span>Зоны доставки</span>
+                </button>
+                <button onclick="toggleCartModal()" class="relative flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-dark-900 font-bold transition shadow-lg shadow-amber-500/20">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span class="hidden sm:inline">Корзина</span>
+                    <span id="cartBadge" class="absolute -top-2 -right-2 bg-red-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold hidden">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+        
+        <!-- Hero Banner / Notice -->
+        <div class="mb-8 rounded-2xl bg-gradient-to-r from-dark-800 to-dark-700 border border-dark-600 p-6 sm:p-8 shadow-xl relative overflow-hidden">
+            <div class="absolute -right-10 -bottom-10 opacity-10 text-9xl text-amber-500 pointer-events-none">
+                <i class="fa-solid fa-box-open"></i>
+            </div>
+            <div class="relative z-10 max-w-2xl">
+                <span class="inline-block px-3 py-1 rounded-full bg-amber-500/10 text-amber-400 text-xs font-semibold mb-3 border border-amber-500/20">
+                    Прайс-лист актуален
+                </span>
+                <h2 class="text-2xl sm:text-3xl font-bold text-white mb-2">Оптовые поставки сигарет в Москве и области</h2>
+                <p class="text-gray-400 text-sm sm:text-base mb-6">Выберите нужную позицию и количество блоков. Система автоматически рассчитает лучшую цену в зависимости от объема заказа.</p>
+                <div class="flex flex-wrap gap-4 text-xs sm:text-sm text-gray-300">
+                    <div class="flex items-center space-x-2 bg-dark-900/60 px-3 py-1.5 rounded-lg border border-dark-600">
+                        <i class="fa-solid fa-boxes-stacked text-amber-500"></i>
+                        <span>Коробка (1 вид / 50 блоков) — Мин. цена</span>
+                    </div>
+                    <div class="flex items-center space-x-2 bg-dark-900/60 px-3 py-1.5 rounded-lg border border-dark-600">
+                        <i class="fa-solid fa-layer-group text-amber-500"></i>
+                        <span>Коробка миксом (50 блоков)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search & Filters Toolbar -->
+        <div class="flex flex-col md:flex-row gap-4 mb-8 justify-between items-stretch">
+            <!-- Search input -->
+            <div class="relative flex-grow max-w-md">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                <input type="text" id="searchInput" placeholder="Поиск по названию (например, Winston, Marlboro, NZ...)" 
+                    class="w-full pl-11 pr-4 py-3 rounded-xl bg-dark-800 border border-dark-600 text-white placeholder-gray-500 focus:outline-none focus:border-amber-500 transition text-sm">
+            </div>
+
+            <!-- Category Filter Buttons -->
+            <div id="categoryFilters" class="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 no-scrollbar">
+                <button onclick="filterCategory('all')" data-cat="all" class="cat-btn px-4 py-2.5 rounded-xl text-sm font-medium whitespace-nowrap transition bg-amber-500 text-dark-900 font-bold shadow-md">
+                    Все товары
+                </button>
+                <button onclick="filterCategory('rf')" data-cat="rf" class="cat-btn px-4 py-2.5 rounded-xl text-sm font-medium whitespace-nowrap transition bg-dark-800 hover:bg-dark-700 text-gray-300 border border-dark-600">
+                    🇷🇺 С акцизом РФ
+                </button>
+                <button onclick="filterCategory('bel')" data-cat="bel" class="cat-btn px-4 py-2.5 rounded-xl text-sm font-medium whitespace-nowrap transition bg-dark-800 hover:bg-dark-700 text-gray-300 border border-dark-600">
+                    🇧🇾 Белорусские
+                </button>
+                <button onclick="filterCategory('df')" data-cat="df" class="cat-btn px-4 py-2.5 rounded-xl text-sm font-medium whitespace-nowrap transition bg-dark-800 hover:bg-dark-700 text-gray-300 border border-dark-600">
+                    ✈️ Duty Free
+                </button>
+                <button onclick="filterCategory('arab')" data-cat="arab" class="cat-btn px-4 py-2.5 rounded-xl text-sm font-medium whitespace-nowrap transition bg-dark-800 hover:bg-dark-700 text-gray-300 border border-dark-600">
+                    🇦🇪 Арабские
+                </button>
+                <button onclick="filterCategory('arm')" data-cat="arm" class="cat-btn px-4 py-2.5 rounded-xl text-sm font-medium whitespace-nowrap transition bg-dark-800 hover:bg-dark-700 text-gray-300 border border-dark-600">
+                    🇦🇲 Армянские
+                </button>
+            </div>
+        </div>
+
+        <!-- Products Table / Grid View -->
+        <div class="bg-dark-800 rounded-2xl border border-dark-600 shadow-2xl overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b border-dark-600 bg-dark-700/50 text-xs uppercase tracking-wider text-gray-400">
+                            <th class="py-4 px-6 font-semibold">Наименование товара</th>
+                            <th class="py-4 px-4 font-semibold text-center">Коробка (1 вид)<br><span class="text-[10px] text-amber-500 font-normal">50 блоков</span></th>
+                            <th class="py-4 px-4 font-semibold text-center">Коробка миксом<br><span class="text-[10px] text-amber-500 font-normal">50 блоков</span></th>
+                            <th class="py-4 px-4 font-semibold text-center">От 10 до 49 блоков</th>
+                            <th class="py-4 px-4 font-semibold text-center">От 5 до 9 блоков</th>
+                            <th class="py-4 px-6 font-semibold text-right">Действие</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productsTableBody" class="divide-y divide-dark-700 text-sm">
+                        <!-- Filled by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            <!-- Empty state -->
+            <div id="emptyState" class="hidden py-16 text-center">
+                <i class="fa-solid fa-box-open text-4xl text-gray-600 mb-3"></i>
+                <p class="text-gray-400 font-medium">Ничего не найдено по вашему запросу</p>
+                <button onclick="resetSearch()" class="mt-3 px-4 py-2 bg-dark-700 hover:bg-dark-600 text-xs rounded-lg text-amber-500 transition">Сбросить фильтры</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark-800 border-t border-dark-600 mt-12 py-8 text-center text-xs text-gray-500">
+        <div class="max-w-7xl mx-auto px-4 space-y-2">
+            <p>© 2026 Оптовая витрина табачной продукции. Все цены указаны в рублях за 1 блок (в блоке 10 пачек).</p>
+            <p class="text-gray-600">Информация на сайте носит ознакомительный характер и не является публичной офертой.</p>
+        </div>
+    </footer>
+
+    <!-- Delivery Info Modal -->
+    <div id="deliveryModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-dark-800 border border-dark-600 rounded-2xl max-w-lg w-full p-6 shadow-2xl relative">
+            <button onclick="toggleDeliveryModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="flex items-center space-x-3 mb-4">
+                <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center text-lg">
+                    <i class="fa-solid fa-truck-ramp-box"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-white">Стоимость доставки</h3>
+                    <p class="text-xs text-gray-400">Москва и Московская область</p>
+                </div>
+            </div>
+            <div class="space-y-3 text-sm divide-y divide-dark-700">
+                <div class="flex justify-between pt-2">
+                    <span class="text-gray-300">В пределах МКАД / Новая Москва (пешком до метро)</span>
+                    <span class="font-bold text-amber-500">500 ₽</span>
+                </div>
+                <div class="flex justify-between pt-3">
+                    <span class="text-gray-300">Химки, Мытищи, Королев, Люберцы, Красногорск, Реутово, Долгопрудный</span>
+                    <span class="font-bold text-amber-500">800 ₽</span>
+                </div>
+                <div class="flex justify-between pt-3">
+                    <span class="text-gray-300">Апрелевка, Одинцово, Щелково, Пушкино, Балашиха, Лыткарино</span>
+                    <span class="font-bold text-amber-500">1 000 ₽</span>
+                </div>
+                <div class="flex justify-between pt-3">
+                    <span class="text-gray-300">Подольск, Жуковский, Зеленоград, Железнодорожный, Домодедово</span>
+                    <span class="font-bold text-amber-500">1 200 ₽</span>
+                </div>
+            </div>
+            <div class="mt-6">
+                <button onclick="toggleDeliveryModal()" class="w-full py-2.5 bg-dark-700 hover:bg-dark-600 text-white rounded-xl font-medium transition text-sm">Понятно</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart / Calculator Modal -->
+    <div id="cartModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden flex items-center justify-end">
+        <div class="bg-dark-800 border-l border-dark-600 h-full w-full max-w-md p-6 flex flex-col shadow-2xl relative transform transition-transform">
+            <div class="flex items-center justify-between pb-4 border-b border-dark-600">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-cart-shopping text-amber-500"></i>
+                    <h3 class="text-lg font-bold text-white">Корзина и расчет заказа</h3>
+                </div>
+                <button onclick="toggleCartModal()" class="text-gray-400 hover:text-white text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Cart Items List -->
+            <div id="cartItemsContainer" class="flex-grow overflow-y-auto py-4 space-y-3 divide-y divide-dark-700/50">
+                <!-- Filled dynamically -->
+            </div>
+
+            <!-- Empty Cart Notice -->
+            <div id="emptyCartNotice" class="hidden flex-grow flex flex-col items-center justify-center text-center py-12">
+                <i class="fa-solid fa-basket-shopping text-5xl text-gray-600 mb-3"></i>
+                <p class="text-gray-400 font-medium">Ваша корзина пуста</p>
+                <p class="text-xs text-gray-500 mt-1">Добавьте позиции из каталога</p>
+            </div>
+
+            <!-- Cart Summary & Checkout -->
+            <div id="cartSummarySection" class="pt-4 border-t border-dark-600 space-y-4">
+                <div class="space-y-1.5 text-sm">
+                    <div class="flex justify-between text-gray-400">
+                        <span>Всего блоков:</span>
+                        <span id="totalBlocksCount" class="font-semibold text-white">0 шт.</span>
+                    </div>
+                    <div class="flex justify-between text-base font-bold text-white pt-1">
+                        <span>Итоговая сумма:</span>
+                        <span id="totalSumPrice" class="text-amber-500 text-lg">0 ₽</span>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-xs text-gray-400 font-medium block">Выберите зону доставки:</label>
+                    <select id="deliveryZoneSelect" onchange="updateCartTotal()" class="w-full bg-dark-900 border border-dark-600 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500">
+                        <option value="0">Самовывоз / Без доставки (0 ₽)</option>
+                        <option value="500">В пределах МКАД / Новая Москва (500 ₽)</option>
+                        <option value="800">Химки, Мытищи, Королев, Люберцы и др. (800 ₽)</option>
+                        <option value="1000">Апрелевка, Одинцово, Щелково и др. (1 000 ₽)</option>
+                        <option value="1200">Подольск, Жуковский, Зеленоград и др. (1 200 ₽)</option>
+                    </select>
+                </div>
+
+                <button onclick="checkoutOrder()" class="w-full py-3 bg-amber-500 hover:bg-amber-600 text-dark-900 font-bold rounded-xl transition shadow-lg shadow-amber-500/20 text-sm flex items-center justify-center space-x-2">
+                    <i class="fa-brands fa-whatsapp text-lg"></i>
+                    <span>Оформить заказ в WhatsApp</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 bg-dark-700 border border-amber-500/50 text-white px-4 py-3 rounded-xl shadow-2xl flex items-center space-x-3 transform translate-y-24 opacity-0 transition-all duration-300">
+        <i class="fa-solid fa-circle-check text-amber-500 text-lg"></i>
+        <span id="toastText" class="text-sm font-medium">Товар добавлен в корзину</span>
+    </div>
+
+    <script>
+        // Data Source generated from provided price lists
+        const products = [
+            // RF Cigarettes
+            { id: 1, name: "Winston blue", cat: "rf", p1: 55, pMix: 58, p10: 70, p5: 75 },
+            { id: 2, name: "Winston red", cat: "rf", p1: 57, pMix: 60, p10: 70, p5: 75 },
+            { id: 3, name: "Winston компакт (Краснодар)", cat: "rf", p1: 72, pMix: 75, p10: 85, p5: 90 },
+            { id: 4, name: "Winston XS 100", cat: "rf", p1: 80, pMix: 83, p10: 95, p5: 100 },
+            { id: 5, name: "Winston XS тон", cat: "rf", p1: 82, pMix: 85, p10: 95, p5: 100 },
+            { id: 6, name: "Winston XS blue (Краснодар)", cat: "rf", p1: 62, pMix: 65, p10: 75, p5: 80 },
+            { id: 7, name: "Winston XS silver (Краснодар)", cat: "rf", p1: 72, pMix: 75, p10: 85, p5: 90 },
+            { id: 8, name: "Winston XSTYLE blue (Краснодар)", cat: "rf", p1: 70, pMix: 73, p10: 85, p5: 90 },
+            { id: 9, name: "Winston XSTYLE silver (Воронеж)", cat: "rf", p1: 72, pMix: 75, p10: 85, p5: 90 },
+            { id: 10, name: "Winston superslims", cat: "rf", p1: 70, pMix: 73, p10: 85, p5: 90 },
+            { id: 11, name: "Winston 2 кнопки", cat: "rf", p1: 97, pMix: 100, p10: 110, p5: 115 },
+            { id: 12, name: "Winston 1 кнопка (Краснодар)", cat: "rf", p1: 85, pMix: 88, p10: 100, p5: 105 },
+            { id: 13, name: "Winston компакт фрозен", cat: "rf", p1: 83, pMix: 86, p10: 100, p5: 105 },
+            { id: 14, name: "Winston компакт кастер", cat: "rf", p1: 83, pMix: 86, p10: 100, p5: 105 },
+            { id: 15, name: "Winston компакт карамель", cat: "rf", p1: 83, pMix: 86, p10: 100, p5: 105 },
+            { id: 16, name: "Winston компакт шоколад", cat: "rf", p1: 83, pMix: 86, p10: 100, p5: 105 },
+            { id: 17, name: "Marlboro gold", cat: "rf", p1: 57, pMix: 60, p10: 70, p5: 75 },
+            { id: 18, name: "Marlboro red", cat: "rf", p1: 57, pMix: 60, p10: 70, p5: 75 },
+            { id: 19, name: "Marlboro crafted синий (Воронеж)", cat: "rf", p1: 77, pMix: 80, p10: 90, p5: 95 },
+            { id: 20, name: "Marlboro 2 кнопки", cat: "rf", p1: 97, pMix: 100, p10: 110, p5: 115 },
+            { id: 21, name: "Marlboro touch", cat: "rf", p1: 73, pMix: 77, p10: 85, p5: 90 },
+            { id: 22, name: "Marlboro КС шоколад", cat: "rf", p1: 82, pMix: 85, p10: 95, p5: 100 },
+            { id: 23, name: "Русский стиль синий", cat: "rf", p1: 57, pMix: 60, p10: 70, p5: 75 },
+            { id: 24, name: "Русский стиль чёрный", cat: "rf", p1: 57, pMix: 60, p10: 70, p5: 75 },
+            { id: 25, name: "KENT 4 (Краснодар)", cat: "rf", p1: 67, pMix: 70, p10: 80, p5: 85 },
+            { id: 26, name: "KENT 8", cat: "rf", p1: 67, pMix: 70, p10: 80, p5: 85 },
+            { id: 27, name: "KENT crystal blue (Краснодар)", cat: "rf", p1: 70, pMix: 73, p10: 85, p5: 90 },
+            { id: 28, name: "KENT crystal зеленый", cat: "rf", p1: 83, pMix: 86, p10: 100, p5: 105 },
+            { id: 29, name: "KENT crystal руби (вишня)", cat: "rf", p1: 83, pMix: 86, p10: 100, p5: 105 },
+            { id: 30, name: "Esse change", cat: "rf", p1: 97, pMix: 100, p10: 110, p5: 115 },
+            { id: 31, name: "Play superslims", cat: "rf", p1: 70, pMix: 73, p10: 85, p5: 90 },
+            { id: 32, name: "Rothmans demi синий (Краснодар)", cat: "rf", p1: 67, pMix: 70, p10: 80, p5: 85 },
+            { id: 33, name: "Rothmans кнопка (зеленая, фиолетовая)", cat: "rf", p1: 88, pMix: 91, p10: 100, p5: 105 },
+            { id: 34, name: "Camel gold", cat: "rf", p1: 52, pMix: 55, p10: 70, p5: 75 },
+            { id: 35, name: "Camel compact (Краснодар)", cat: "rf", p1: 70, pMix: 73, p10: 80, p5: 85 },
+            { id: 36, name: "Camel compact шоколад (Краснодар)", cat: "rf", p1: 78, pMix: 81, p10: 90, p5: 95 },
+            { id: 37, name: "Camel compact виноград", cat: "rf", p1: 83, pMix: 86, p10: 100, p5: 105 },
+            { id: 38, name: "Lucky strike компакт синий", cat: "rf", p1: 69, pMix: 72, p10: 85, p5: 90 },
+            { id: 39, name: "Lucky strike компакт вишня", cat: "rf", p1: 83, pMix: 86, p10: 100, p5: 105 },
+            { id: 40, name: "Chesterfield compact (Краснодар)", cat: "rf", p1: 74, pMix: 77, p10: 90, p5: 95 },
+            { id: 41, name: "Chesterfield кнопка арбуз", cat: "rf", p1: 83, pMix: 86, p10: 100, p5: 105 },
+            { id: 42, name: "Parliament Aqua Blue (Краснодар)", cat: "rf", p1: 87, pMix: 90, p10: 100, p5: 105 },
+            { id: 43, name: "Parliament Silver Blue (Краснодар)", cat: "rf", p1: 92, pMix: 95, p10: 105, p5: 110 },
+            { id: 44, name: "Sobranie blue/gold/black", cat: "rf", p1: 82, pMix: 85, p10: 95, p5: 100 },
+            { id: 45, name: "Sobranie тон кофе", cat: "rf", p1: 80, pMix: 83, p10: 95, p5: 100 },
+            { id: 46, name: "LM Blue", cat: "rf", p1: 56, pMix: 59, p10: 70, p5: 75 },
+            { id: 47, name: "LD Blue", cat: "rf", p1: 54, pMix: 57, p10: 70, p5: 75 },
+            { id: 48, name: "LD компакт шоколад (Краснодар)", cat: "rf", p1: 77, pMix: 80, p10: 90, p5: 95 },
+            { id: 49, name: "Bond blue", cat: "rf", p1: 56, pMix: 59, p10: 70, p5: 75 },
+            { id: 50, name: "Bond compact синий", cat: "rf", p1: 70, pMix: 73, p10: 85, p5: 90 },
+            { id: 51, name: "Philipp Morris compact (Краснодар)", cat: "rf", p1: 68, pMix: 71, p10: 85, p5: 90 },
+            { id: 52, name: "Philipp Morris арбуз", cat: "rf", p1: 92, pMix: 95, p10: 105, p5: 110 },
+            { id: 53, name: "Чапман КС (вишня, шоколад, ваниль)", cat: "rf", p1: 97, pMix: 100, p10: 110, p5: 115 },
+            { id: 54, name: "Чапман компакт (вишня, шоколад)", cat: "rf", p1: 107, pMix: 110, p10: 120, p5: 125 },
+            { id: 55, name: "Донской табак темный", cat: "rf", p1: 50, pMix: 53, p10: 65, p5: 70 },
+            { id: 56, name: "Беломор", cat: "rf", p1: 42, pMix: 45, p10: 55, p5: 60 },
+            { id: 57, name: "Прима", cat: "rf", p1: 27, pMix: 30, p10: 40, p5: 45 },
+
+            // Belarusian Cigarettes
+            { id: 58, name: "Квин ментол", cat: "bel", p1: 67, pMix: 70, p10: 80, p5: 85 },
+            { id: 59, name: "NZ 08", cat: "bel", p1: 65, pMix: 68, p10: 80, p5: 85 },
+            { id: 60, name: "NZ 10 дубль", cat: "bel", p1: 44, pMix: 47, p10: 60, p5: 65 },
+            { id: 61, name: "NZ Black Power", cat: "bel", p1: 67, pMix: 70, p10: 80, p5: 85 },
+            { id: 62, name: "NZ Charm шоколад", cat: "bel", p1: 81, pMix: 84, p10: 95, p5: 100 },
+            { id: 63, name: "Кредо", cat: "bel", p1: 60, pMix: 63, p10: 75, p5: 80 },
+            { id: 64, name: "Фест красный", cat: "bel", p1: 60, pMix: 63, p10: 75, p5: 80 },
+            { id: 65, name: "Минск компакт красный/синий", cat: "bel", p1: 70, pMix: 73, p10: 85, p5: 90 },
+            { id: 66, name: "Dove 100 черный", cat: "bel", p1: 77, pMix: 80, p10: 90, p5: 95 },
+            { id: 67, name: "Dove Superslims ментол", cat: "bel", p1: 77, pMix: 80, p10: 90, p5: 95 },
+            { id: 68, name: "Корона сильвер", cat: "bel", p1: 75, pMix: 78, p10: 90, p5: 95 },
+            { id: 69, name: "Корона стиль", cat: "bel", p1: 77, pMix: 80, p10: 90, p5: 95 },
+            { id: 70, name: "Портал оне/сильвер/голд", cat: "bel", p1: 71, pMix: 74, p10: 85, p5: 90 },
+            { id: 71, name: "Калипсо голд", cat: "bel", p1: 83, pMix: 86, p10: 95, p5: 100 },
+            { id: 72, name: "Белуга слимс вишня", cat: "bel", p1: 97, pMix: 100, p10: 110, p5: 115 },
+
+            // Duty Free
+            { id: 73, name: "Marlboro gold (Duty Free)", cat: "df", p1: 72, pMix: 75, p10: 85, p5: 90 },
+            { id: 74, name: "Marlboro red Хамадей", cat: "df", p1: 78, pMix: 81, p10: 90, p5: 95 },
+            { id: 75, name: "Marlboro белый-красный", cat: "df", p1: 87, pMix: 90, p10: 100, p5: 105 },
+            { id: 76, name: "Marlboro черный", cat: "df", p1: 92, pMix: 95, p10: 105, p5: 110 },
+            { id: 77, name: "Marlboro nano red (Краснодар)", cat: "df", p1: 64, pMix: 67, p10: 75, p5: 80 },
+            { id: 78, name: "Camel gold (Duty Free)", cat: "df", p1: 92, pMix: 95, p10: 105, p5: 110 },
+            { id: 79, name: "Camel black", cat: "df", p1: 92, pMix: 95, p10: 105, p5: 110 },
+            { id: 80, name: "Chesterfield КС красный", cat: "df", p1: 92, pMix: 95, p10: 105, p5: 110 },
+            { id: 81, name: "Dubao красный, синий Оригинал", cat: "df", p1: 87, pMix: 90, p10: 100, p5: 105 },
+            { id: 82, name: "Winston superslims (Duty Free)", cat: "df", p1: 70, pMix: 73, p10: 85, p5: 90 },
+            { id: 83, name: "Kent 4 (Duty Free)", cat: "df", p1: 92, pMix: 95, p10: 105, p5: 110 },
+            { id: 84, name: "Sobranie black нано (Краснодар)", cat: "df", p1: 66, pMix: 71, p10: 80, p5: 85 },
+            { id: 85, name: "Parliament Aqua (Duty Free)", cat: "df", p1: 92, pMix: 95, p10: 105, p5: 110 },
+            { id: 86, name: "Parliament Silver (Duty Free)", cat: "df", p1: 97, pMix: 100, p10: 110, p5: 115 },
+            { id: 87, name: "Richmond compact (вишня, шоколад)", cat: "df", p1: 87, pMix: 90, p10: 100, p5: 105 },
+
+            // Arabic Cigarettes
+            { id: 88, name: "Milano Paris/NY/Zheneva", cat: "arab", p1: 92, pMix: 95, p10: 105, p5: 110 },
+            { id: 89, name: "Milano London", cat: "arab", p1: 102, pMix: 105, p10: 115, p5: 120 },
+            { id: 90, name: "Milano ss Манго яблоко 2 кнопки", cat: "arab", p1: 100, pMix: 103, p10: 115, p5: 120 },
+            { id: 91, name: "Milano ss вишня/шоколад", cat: "arab", p1: 100, pMix: 103, p10: 115, p5: 120 },
+            { id: 92, name: "Milano Duo effect ДВЕ КНОПКИ сс", cat: "arab", p1: 102, pMix: 105, p10: 115, p5: 120 },
+            { id: 93, name: "Milano Blueberry", cat: "arab", p1: 105, pMix: 108, p10: 120, p5: 125 },
+            { id: 94, name: "Milano компакт шоколад", cat: "arab", p1: 100, pMix: 103, p10: 115, p5: 120 },
+            { id: 95, name: "Cavallo ss (красн, син, сильвер, черный)", cat: "arab", p1: 97, pMix: 100, p10: 110, p5: 115 },
+            { id: 96, name: "Cavallo Twin ball комп. ДВЕ КНОПКИ", cat: "arab", p1: 108, pMix: 111, p10: 120, p5: 125 },
+            { id: 97, name: "Manchester компакт красный", cat: "arab", p1: 97, pMix: 100, p10: 110, p5: 115 },
+            { id: 98, name: "Manchester сс арбуз", cat: "arab", p1: 93, pMix: 96, p10: 105, p5: 110 },
+            { id: 99, name: "Oris компакт кнопка тропикал", cat: "arab", p1: 103, pMix: 106, p10: 115, p5: 120 },
+            { id: 100, name: "Oris компакт вишня", cat: "arab", p1: 105, pMix: 108, p10: 120, p5: 125 },
+            { id: 101, name: "Oris Мохито", cat: "arab", p1: 107, pMix: 110, p10: 120, p5: 125 },
+            { id: 102, name: "MG кофе, вишня, мёд, виноград", cat: "arab", p1: 90, pMix: 93, p10: 100, p5: 105 },
+            { id: 103, name: "Кепо компакт черника", cat: "arab", p1: 87, pMix: 90, p10: 100, p5: 105 },
+            { id: 104, name: "Сенатор нано (виноград, вишня)", cat: "arab", p1: 102, pMix: 105, p10: 115, p5: 120 },
+            { id: 105, name: "Oracle Кинг (вишня, виноград)", cat: "arab", p1: 95, pMix: 98, p10: 110, p5: 115 },
+
+            // Armenian Cigarettes
+            { id: 106, name: "Morion slims", cat: "arm", p1: 107, pMix: 110, p10: 120, p5: 125 },
+            { id: 107, name: "Morion золотой", cat: "arm", p1: 117, pMix: 120, p10: 130, p5: 135 },
+            { id: 108, name: "Morion superslim", cat: "arm", p1: 97, pMix: 100, p10: 110, p5: 115 },
+            { id: 109, name: "Morion сс (апельсин, яблоко, черника)", cat: "arm", p1: 102, pMix: 105, p10: 115, p5: 120 },
+            { id: 110, name: "Lex slims gold", cat: "arm", p1: 107, pMix: 110, p10: 120, p5: 125 },
+            { id: 111, name: "Soprano slims", cat: "arm", p1: 117, pMix: 120, p10: 130, p5: 135 },
+            { id: 112, name: "Ararat nano серый, синий", cat: "arm", p1: 113, pMix: 116, p10: 125, p5: 130 },
+            { id: 113, name: "Ararat толстый", cat: "arm", p1: 165, pMix: 168, p10: 180, p5: 185 },
+            { id: 114, name: "Black tip", cat: "arm", p1: 127, pMix: 130, p10: 140, p5: 145 },
+            { id: 115, name: "Almaz slim", cat: "arm", p1: 117, pMix: 120, p10: 130, p5: 135 },
+            { id: 116, name: "Ahtamar slim", cat: "arm", p1: 147, pMix: 150, p10: 160, p5: 165 },
+            { id: 117, name: "Классик слим (белый, золотой)", cat: "arm", p1: 117, pMix: 120, p10: 130, p5: 135 },
+            { id: 118, name: "Вип коричневый", cat: "arm", p1: 143, pMix: 146, p10: 155, p5: 160 },
+            { id: 119, name: "Гарни", cat: "arm", p1: 127, pMix: 130, p10: 140, p5: 145 },
+            { id: 120, name: "Демократ КС шоколад", cat: "arm", p1: 132, pMix: 135, p10: 145, p5: 150 },
+            { id: 121, name: "Демократ компакт (вишня, шоколад)", cat: "arm", p1: 127, pMix: 130, p10: 140, p5: 145 }
+        ];
+
+        let currentCategory = 'all';
+        let searchQuery = '';
+        let cart = {}; // productId -> quantity (in blocks)
+
+        // Initialization
+        document.addEventListener('DOMContentLoaded', () => {
+            renderProducts();
+            
+            document.getElementById('searchInput').addEventListener('input', (e) => {
+                searchQuery = e.target.value.toLowerCase().trim();
+                renderProducts();
+            });
+        });
+
+        function filterCategory(cat) {
+            currentCategory = cat;
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                if (btn.dataset.cat === cat) {
+                    btn.className = "cat-btn px-4 py-2.5 rounded-xl text-sm font-medium whitespace-nowrap transition bg-amber-500 text-dark-900 font-bold shadow-md";
+                } else {
+                    btn.className = "cat-btn px-4 py-2.5 rounded-xl text-sm font-medium whitespace-nowrap transition bg-dark-800 hover:bg-dark-700 text-gray-300 border border-dark-600";
+                }
+            });
+            renderProducts();
+        }
+
+        function resetSearch() {
+            document.getElementById('searchInput').value = '';
+            searchQuery = '';
+            filterCategory('all');
+        }
+
+        function renderProducts() {
+            const tbody = document.getElementById('productsTableBody');
+            const emptyState = document.getElementById('emptyState');
+            tbody.innerHTML = '';
+
+            const filtered = products.filter(p => {
+                const matchCat = currentCategory === 'all' || p.cat === currentCategory;
+                const matchSearch = p.name.toLowerCase().includes(searchQuery);
+                return matchCat && matchSearch;
+            });
+
+            if (filtered.length === 0) {
+                emptyState.classList.remove('hidden');
+                return;
+            } else {
+                emptyState.classList.add('hidden');
+            }
+
+            filtered.forEach(p => {
+                const qty = cart[p.id] || 0;
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-dark-700/40 transition border-b border-dark-700/50";
+                tr.innerHTML = `
+                    <td class="py-4 px-6 font-medium text-white">
+                        <div class="flex items-center space-x-2">
+                            <span>${p.name}</span>
+                            ${p.cat === 'rf' ? '<span class="text-[10px] bg-blue-500/10 text-blue-400 px-2 py-0.5 rounded border border-blue-500/20">РФ</span>' : ''}
+                            ${p.cat === 'bel' ? '<span class="text-[10px] bg-red-500/10 text-red-400 px-2 py-0.5 rounded border border-red-500/20">РБ</span>' : ''}
+                            ${p.cat === 'df' ? '<span class="text-[10px] bg-purple-500/10 text-purple-400 px-2 py-0.5 rounded border border-purple-500/20">DF</span>' : ''}
+                            ${p.cat === 'arab' ? '<span class="text-[10px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/20">Араб</span>' : ''}
+                            ${p.cat === 'arm' ? '<span class="text-[10px] bg-amber-500/10 text-amber-400 px-2 py-0.5 rounded border border-amber-500/20">Арм</span>' : ''}
+                        </div>
+                    </td>
+                    <td class="py-4 px-4 text-center text-amber-400 font-bold">${p.p1} ₽</td>
+                    <td class="py-4 px-4 text-center text-gray-300">${p.pMix} ₽</td>
+                    <td class="py-4 px-4 text-center text-gray-300">${p.p10} ₽</td>
+                    <td class="py-4 px-4 text-center text-gray-300">${p.p5} ₽</td>
+                    <td class="py-4 px-6 text-right">
+                        <div class="inline-flex items-center bg-dark-900 rounded-xl border border-dark-600 p-1">
+                            <button onclick="updateQuantity(${p.id}, -1)" class="w-7 h-7 rounded-lg bg-dark-700 hover:bg-dark-600 text-gray-300 flex items-center justify-center transition">
+                                <i class="fa-solid fa-minus text-xs"></i>
+                            </button>
+                            <input type="number" id="qty-${p.id}" value="${qty}" min="0" onchange="setQuantity(${p.id}, this.value)" 
+                                class="w-12 text-center bg-transparent text-white font-bold text-xs focus:outline-none">
+                            <button onclick="updateQuantity(${p.id}, 1)" class="w-7 h-7 rounded-lg bg-dark-700 hover:bg-dark-600 text-gray-300 flex items-center justify-center transition">
+                                <i class="fa-solid fa-plus text-xs"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function updateQuantity(id, delta) {
+            const current = cart[id] || 0;
+            const next = Math.max(0, current + delta);
+            if (next === 0) {
+                delete cart[id];
+            } else {
+                cart[id] = next;
+            }
+            
+            // update input field if visible
+            const input = document.getElementById(`qty-${id}`);
+            if (input) input.value = next;
+
+            updateCartBadge();
+            showToast(delta > 0 ? "Количество увеличено" : "Количество уменьшено");
+        }
+
+        function setQuantity(id, val) {
+            const num = parseInt(val) || 0;
+            if (num <= 0) {
+                delete cart[id];
+            } else {
+                cart[id] = num;
+            }
+            updateCartBadge();
+        }
+
+        function getBestPrice(product, qty) {
+            if (qty >= 50) return product.p1;
+            if (qty >= 10) return product.p10; // tier logic or standard tier based on price list
+            return product.p5;
+        }
+        
+        // Accurate wholesale tier logic from price columns:
+        // Col 1: Цена коробки одного вида (50 блоков) -> best price
+        // Col 2: Цена коробки миксом (50 блоков)
+        // Col 3: От 10 до 49 блоков
+        // Col 4: От 5 до 9 блоков
+        function getProductPriceForQty(p, qty) {
+            if (qty >= 50) return p.p1;
+            if (qty >= 10) return p.p10;
+            return p.p5;
+        }
+
+        function updateCartBadge() {
+            const totalItemsCount = Object.values(cart).reduce((a, b) => a + b, 0);
+            const badge = document.getElementById('cartBadge');
+            if (totalItemsCount > 0) {
+                badge.innerText = totalItemsCount;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+
+        function toggleCartModal() {
+            const modal = document.getElementById('cartModal');
+            modal.classList.toggle('hidden');
+            if (!modal.classList.contains('hidden')) {
+                renderCartItems();
+            }
+        }
+
+        function toggleDeliveryModal() {
+            const modal = document.getElementById('deliveryModal');
+            modal.classList.toggle('hidden');
+        }
+
+        function renderCartItems() {
+            const container = document.getElementById('cartItemsContainer');
+            const emptyNotice = document.getElementById('emptyCartNotice');
+            const summarySec = document.getElementById('cartSummarySection');
+            container.innerHTML = '';
+
+            const productIds = Object.keys(cart);
+            if (productIds.length === 0) {
+                emptyNotice.classList.remove('hidden');
+                summarySec.classList.add('hidden');
+                return;
+            } else {
+                emptyNotice.classList.add('hidden');
+                summarySec.classList.remove('hidden');
+            }
+
+            productIds.forEach(id => {
+                const p = products.find(prod => prod.id == id);
+                const qty = cart[id];
+                const unitPrice = getProductPriceForQty(p, qty);
+                const itemSum = unitPrice * qty;
+
+                const div = document.createElement('div');
+                div.className = "py-3 flex items-center justify-between";
+                div.innerHTML = `
+                    <div class="pr-2">
+                        <h4 class="text-xs font-bold text-white">${p.name}</h4>
+                        <p class="text-[11px] text-gray-400">${qty} блоков × ${unitPrice} ₽ = <span class="text-amber-400 font-semibold">${itemSum} ₽</span></p>
+                    </div>
+                    <div class="flex items-center space-x-2 flex-shrink-0">
+                        <button onclick="updateQuantity(${p.id}, -1); renderCartItems();" class="w-6 h-6 rounded bg-dark-700 text-gray-300 flex items-center justify-center text-xs hover:bg-dark-600">-</button>
+                        <span class="text-xs font-bold text-white w-6 text-center">${qty}</span>
+                        <button onclick="updateQuantity(${p.id}, 1); renderCartItems();" class="w-6 h-6 rounded bg-dark-700 text-gray-300 flex items-center justify-center text-xs hover:bg-dark-600">+</button>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+
+            updateCartTotal();
+        }
+
+        function updateCartTotal() {
+            let totalBlocks = 0;
+            let goodsSum = 0;
+
+            Object.keys(cart).forEach(id => {
+                const p = products.find(prod => prod.id == id);
+                const qty = cart[id];
+                totalBlocks += qty;
+                goodsSum += getProductPriceForQty(p, qty) * qty;
+            });
+
+            const deliveryCost = parseInt(document.getElementById('deliveryZoneSelect').value) || 0;
+            const finalSum = goodsSum + deliveryCost;
+
+            document.getElementById('totalBlocksCount').innerText = totalBlocks + ' шт.';
+            document.getElementById('totalSumPrice').innerText = finalSum.toLocaleString() + ' ₽';
+        }
+
+        function checkoutOrder() {
+            let message = "Здравствуйте! Хочу сделать заказ оптом:\n\n";
+            let totalBlocks = 0;
+            let goodsSum = 0;
+
+            Object.keys(cart).forEach(id => {
+                const p = products.find(prod => prod.id == id);
+                const qty = cart[id];
+                const unitPrice = getProductPriceForQty(p, qty);
+                totalBlocks += qty;
+                goodsSum += unitPrice * qty;
+                message += `- ${p.name}: ${qty} блоков по ${unitPrice} ₽\n`;
+            });
+
+            const deliverySelect = document.getElementById('deliveryZoneSelect');
+            const deliveryCost = parseInt(deliverySelect.value) || 0;
+            const deliveryText = deliverySelect.options[deliverySelect.selectedIndex].text;
+            const finalSum = goodsSum + deliveryCost;
+
+            message += `\nВсего блоков: ${totalBlocks}`;
+            message += `\nСумма товаров: ${goodsSum} ₽`;
+            message += `\nДоставка: ${deliveryText}`;
+            message += `\nИтого к оплате: ${finalSum} ₽`;
+
+            const encoded = encodeURIComponent(message);
+            // WhatsApp link (using standard wa.me format)
+            window.open(`https://wa.me/?text=${encoded}`, '_blank');
+        }
+
+        function showToast(text) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastText').innerText = text;
+            toast.classList.remove('translate-y-24', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-24', 'opacity-0');
+            }, 2500);
+        }
+    </script>
+</body>
+</html>
